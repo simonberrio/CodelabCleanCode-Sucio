@@ -20,4 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Labs20252-Gr06"
-include(":app")
+include(":Lab1-UI")
