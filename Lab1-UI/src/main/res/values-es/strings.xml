@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Lab</string>
+    <string name="personal_title">Información personal</string>
+    <string name="label_first_name">Nombres</string>
+    <string name="label_last_name">Apellidos</string>
+    <string name="label_gender">Sexo</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenino</string>
+    <string name="label_birthdate">Fecha de nacimiento</string>
+    <string name="label_education">Grado de escolaridad</string>
+    <string name="label_education_primary">Primaría</string>
+    <string name="label_education_secundary">Bachillerato</string>
+    <string name="label_education_undergraduate">Pregrado</string>
+    <string name="label_education_graduate">Posgrado</string>
+    <string name="label_education_master">Maestría</string>
+    <string name="label_education_doctorate">Doctorado</string>
+    <string name="next_button">Siguiente</string>
+    <string name="required_field">Campo obligatorio</string>
+</resources>
