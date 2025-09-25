@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">Labs20252-Gr06</string>
+    <string name="app_name">Lab1 UI</string>
+    <string name="personal_title">Personal Information</string>
+    <string name="label_first_name">Name</string>
+    <string name="label_last_name">Last Name</string>
+    <string name="label_gender">Gender</string>
+    <string name="gender_male">male</string>
+    <string name="gender_female">female</string>
+    <string name="label_birthdate">Bithdate</string>
+    <string name="label_education">Level of Education</string>
+    <string name="label_education_primary">Primary</string>
+    <string name="label_education_secundary">Secundary</string>
+    <string name="label_education_undergraduate">Undergraduate</string>
+    <string name="label_education_graduate">Graduate</string>
+    <string name="label_education_master">Master</string>
+    <string name="label_education_doctorate">Doctorate</string>
+    <string name="next_button">Next</string>
+    <string name="required_field">Required Field</string>
+    <string name="title_activity_personal_data">PersonalDataActivity</string>
 </resources>
