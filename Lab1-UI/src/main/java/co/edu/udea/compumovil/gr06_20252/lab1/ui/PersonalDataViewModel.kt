@@ -27,7 +27,8 @@ class PersonalDataViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun updateFirstName(value: String) { update { it.copy(firstName = value) } }
     fun updateLastName(value: String) { update { it.copy(lastName = value) } }
     fun updateGender(value: String) { update { it.copy(gender = value) } }
-//    fun updateBirthDate(millis: Long?) { update { it.copy(birthDateMillis = millis) } }
+
+    fun updateBirthDate(millis: Long?) { update { it.copy(birthDateMillis = millis) } }
     fun updateEducation(value: String) { update { it.copy(education = value) } }
 
     private fun update(transform: (PersonalFormState) -> PersonalFormState) {

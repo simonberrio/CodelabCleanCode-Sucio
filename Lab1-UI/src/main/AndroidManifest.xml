@@ -15,7 +15,7 @@
         <activity
             android:name=".PersonalDataActivity"
             android:exported="true"
-            android:label="@string/title_activity_personal_data"
+            android:label="@string/personal_title"
             android:theme="@style/Theme.Labs20252Gr06"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
