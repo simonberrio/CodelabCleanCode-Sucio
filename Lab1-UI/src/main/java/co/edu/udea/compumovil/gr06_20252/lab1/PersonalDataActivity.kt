@@ -19,12 +19,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -63,8 +68,7 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
     val context = LocalContext.current
     val genderOptions = listOf(
         stringResource(R.string.gender_male),
-        stringResource(R.string.gender_female),
-        stringResource(R.string.gender_other)
+        stringResource(R.string.gender_female)
     )
     val educationLevels = stringArrayResource(R.array.education_levels)
     val expanded = remember { mutableStateOf(false) }
@@ -98,6 +102,12 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         value = viewModel.name.value,
                         onValueChange = viewModel::onNameChanged,
                         label = { Text(stringResource(R.string.label_name)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = null
+                            )
+                        },
                         modifier = Modifier.weight(1f)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -139,6 +149,12 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                             value = viewModel.education.value,
                             onValueChange = {},
                             label = { Text(stringResource(R.string.label_education)) },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.CheckCircle,
+                                    contentDescription = null
+                                )
+                            },
                             trailingIcon = {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
                             },
@@ -192,7 +208,7 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
-                    Text(stringResource(R.string.next_button))
+                    Text(stringResource(R.string.button_next))
                 }
             }
         } else {
@@ -208,7 +224,14 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                     value = viewModel.name.value,
                     onValueChange = viewModel::onNameChanged,
                     label = { Text(stringResource(R.string.label_name)) },
-                    modifier = Modifier.fillMaxWidth()
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+//                    isError = viewModel.nameError.value != null
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -217,38 +240,75 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                     value = viewModel.lastName.value,
                     onValueChange = viewModel::onLastNameChanged,
                     label = { Text(stringResource(R.string.label_last_name)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { datePickerDialog.show() }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
                         value = viewModel.birthday.value,
                         onValueChange = viewModel::onBirthdayChanged,
                         label = { Text(stringResource(R.string.label_birthdate)) },
-                        modifier = Modifier.fillMaxWidth(),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = null
+                            )
+                        },
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        modifier = Modifier.weight(1f) // ocupa todo el espacio disponible
                     )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Button(
+                        onClick = { datePickerDialog.show() },
+//                        modifier = Modifier.height(56.dp) // misma altura del TextField
+                    ) {
+                        Text(stringResource(R.string.button_birthdate))
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(stringResource(R.string.label_gender))
-                genderOptions.forEach { gender ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RadioButton(
-                            selected = viewModel.gender.value == gender,
-                            onClick = { viewModel.onGenderChanged(gender) }
-                        )
-                        Text(gender)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person, // o cualquier otro icono
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(R.string.label_gender),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    genderOptions.forEach { gender ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = viewModel.gender.value == gender,
+                                onClick = { viewModel.onGenderChanged(gender) }
+                            )
+                            Text(gender)
+                        }
                     }
                 }
+
                 Spacer(modifier = Modifier.height(8.dp))
 
                 ExposedDropdownMenuBox(
@@ -260,6 +320,12 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         value = viewModel.education.value,
                         onValueChange = {},
                         label = { Text(stringResource(R.string.label_education)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = null
+                            )
+                        },
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
                         },
@@ -300,7 +366,7 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
-                    Text(stringResource(R.string.next_button))
+                    Text(stringResource(R.string.button_next))
                 }
             }
         }

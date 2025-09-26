@@ -6,8 +6,8 @@
     <string name="label_gender">Gender</string>
     <string name="gender_male">male</string>
     <string name="gender_female">female</string>
-    <string name="gender_other">other</string>
     <string name="label_birthdate">Birthdate</string>
+    <string name="button_birthdate">Change</string>
     <string name="label_education">Level of Education</string>
     <string-array name="education_levels">
         <item>Primary</item>
@@ -17,6 +17,5 @@
         <item>Master</item>
         <item>Doctorate</item>
     </string-array>
-    <string name="next_button">Next</string>
-    <string name="required_field">Required Field</string>
+    <string name="button_next">Next</string>
 </resources>
