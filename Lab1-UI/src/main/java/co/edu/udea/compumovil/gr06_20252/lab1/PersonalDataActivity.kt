@@ -1,6 +1,7 @@
 package co.edu.udea.compumovil.gr06_20252.lab1
 
 import android.app.DatePickerDialog
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -15,28 +16,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import co.edu.udea.compumovil.gr06_20252.lab1.ui.PersonalDataViewModel
 import java.util.Calendar
 
 
@@ -51,26 +57,23 @@ class PersonalDataActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonalDataScreen() {
+fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     val context = LocalContext.current
-    val nameState = remember { mutableStateOf("") }
-    val lastNameState = remember { mutableStateOf("") }
-    val birthdayState = remember { mutableStateOf("") }
     val genderOptions = listOf(
         stringResource(R.string.gender_male),
         stringResource(R.string.gender_female),
         stringResource(R.string.gender_other)
     )
-    val selectedGender = remember { mutableStateOf(genderOptions.first()) }
     val educationLevels = stringArrayResource(R.array.education_levels)
-    val selectedEducation = remember { mutableStateOf(educationLevels[0]) }
     val expanded = remember { mutableStateOf(false) }
 
     val calendar = Calendar.getInstance()
     val datePickerDialog = DatePickerDialog(
         context,
         { _, year, month, dayOfMonth ->
-            birthdayState.value = "$dayOfMonth/${month + 1}/$year"
+            viewModel.onBirthdayChanged("$dayOfMonth/${month + 1}/$year")
         },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),
@@ -82,108 +85,223 @@ fun PersonalDataScreen() {
             TopAppBar(title = { Text(stringResource(R.string.personal_title)) })
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            OutlinedTextField(
-                value = nameState.value,
-                onValueChange = { nameState.value = it },
-                label = { Text(stringResource(R.string.label_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = lastNameState.value,
-                onValueChange = { lastNameState.value = it },
-                label = { Text(stringResource(R.string.label_last_name)) },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Box(
+        if (isLandscape) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { datePickerDialog.show() }
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                OutlinedTextField(
-                    value = birthdayState.value,
-                    onValueChange = {},
-                    label = { Text(stringResource(R.string.label_birthdate)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    enabled = false
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(stringResource(R.string.label_gender))
-            genderOptions.forEach { gender ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(
-                        selected = selectedGender.value == gender,
-                        onClick = { selectedGender.value = gender }
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = viewModel.name.value,
+                        onValueChange = viewModel::onNameChanged,
+                        label = { Text(stringResource(R.string.label_name)) },
+                        modifier = Modifier.weight(1f)
                     )
-                    Text(gender)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    OutlinedTextField(
+                        value = viewModel.lastName.value,
+                        onValueChange = viewModel::onLastNameChanged,
+                        label = { Text(stringResource(R.string.label_last_name)) },
+                        modifier = Modifier.weight(1f)
+                    )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(8.dp))
-            ExposedDropdownMenuBox(
-                expanded = expanded.value,
-                onExpandedChange = { expanded.value = !expanded.value }
-            ) {
-                OutlinedTextField(
-                    readOnly = true,
-                    value = selectedEducation.value,
-                    onValueChange = {},
-                    label = { Text(stringResource(R.string.label_education)) },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                ExposedDropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false }
-                ) {
-                    educationLevels.forEach { level ->
-                        DropdownMenuItem(
-                            text = { Text(level) },
-                            onClick = {
-                                selectedEducation.value = level
-                                expanded.value = false
-                            }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { datePickerDialog.show() }
+                    ) {
+                        OutlinedTextField(
+                            value = viewModel.birthday.value,
+                            onValueChange = viewModel::onBirthdayChanged,
+                            label = { Text(stringResource(R.string.label_birthdate)) },
+                            readOnly = true,
+                            enabled = false,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    ExposedDropdownMenuBox(
+                        expanded = expanded.value,
+                        onExpandedChange = { expanded.value = !expanded.value },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        OutlinedTextField(
+                            readOnly = true,
+                            value = viewModel.education.value,
+                            onValueChange = {},
+                            label = { Text(stringResource(R.string.label_education)) },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
+                            },
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expanded.value,
+                            onDismissRequest = { expanded.value = false }
+                        ) {
+                            educationLevels.forEach { level ->
+                                DropdownMenuItem(
+                                    text = { Text(level) },
+                                    onClick = {
+                                        viewModel.onEducationChanged(level)
+                                        expanded.value = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(stringResource(R.string.label_gender))
+                Row {
+                    genderOptions.forEach { gender ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = viewModel.gender.value == gender,
+                                onClick = { viewModel.onGenderChanged(gender) }
+                            )
+                            Text(gender)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        Log.d("PersonalDataVM", "Nombre:${viewModel.name.value}, ...")
+                        Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
+                            .show()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+                    Text(stringResource(R.string.next_button))
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = {
-                    Log.d(
-                        "PersonalData",
-                        "Nombre: ${nameState.value}, Apellidos: ${lastNameState.value}, " +
-                                "Fecha: ${birthdayState.value}, Género: ${selectedGender.value}, " +
-                                "Educación: ${selectedEducation.value}"
-                    )
-                    Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
-                        .show()
-                },
-                modifier = Modifier.fillMaxWidth()
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Guardar")
+                OutlinedTextField(
+                    value = viewModel.name.value,
+                    onValueChange = viewModel::onNameChanged,
+                    label = { Text(stringResource(R.string.label_name)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = viewModel.lastName.value,
+                    onValueChange = viewModel::onLastNameChanged,
+                    label = { Text(stringResource(R.string.label_last_name)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { datePickerDialog.show() }
+                ) {
+                    OutlinedTextField(
+                        value = viewModel.birthday.value,
+                        onValueChange = viewModel::onBirthdayChanged,
+                        label = { Text(stringResource(R.string.label_birthdate)) },
+                        modifier = Modifier.fillMaxWidth(),
+                        readOnly = true,
+                        enabled = false
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(stringResource(R.string.label_gender))
+                genderOptions.forEach { gender ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(
+                            selected = viewModel.gender.value == gender,
+                            onClick = { viewModel.onGenderChanged(gender) }
+                        )
+                        Text(gender)
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                ExposedDropdownMenuBox(
+                    expanded = expanded.value,
+                    onExpandedChange = { expanded.value = !expanded.value }
+                ) {
+                    OutlinedTextField(
+                        readOnly = true,
+                        value = viewModel.education.value,
+                        onValueChange = {},
+                        label = { Text(stringResource(R.string.label_education)) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false }
+                    ) {
+                        educationLevels.forEach { level ->
+                            DropdownMenuItem(
+                                text = { Text(level) },
+                                onClick = {
+                                    viewModel.onEducationChanged(level)
+                                    expanded.value = false
+                                }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        Log.d(
+                            "PersonalDataVM",
+                            "Nombre:${viewModel.name.value}, Apellido:${viewModel.lastName.value}, Fecha:${viewModel.birthday.value}, Género:${viewModel.gender.value}, Educación:${viewModel.education.value}"
+                        )
+                        Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
+                            .show()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+                    Text(stringResource(R.string.next_button))
+                }
             }
         }
     }
