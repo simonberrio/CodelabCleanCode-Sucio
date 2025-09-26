@@ -4,8 +4,8 @@
     <string name="label_name">Name</string>
     <string name="label_last_name">Last Name</string>
     <string name="label_gender">Gender</string>
-    <string name="gender_male">male</string>
-    <string name="gender_female">female</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
     <string name="label_birthdate">Birthdate</string>
     <string name="button_birthdate">Change</string>
     <string name="label_education">Level of Education</string>

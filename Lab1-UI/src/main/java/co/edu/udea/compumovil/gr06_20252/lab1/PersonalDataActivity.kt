@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -94,7 +95,7 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(16.dp)
+                    .padding(4.dp)
                     .verticalScroll(rememberScrollState())
             ) {
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -115,30 +116,77 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         value = viewModel.lastName.value,
                         onValueChange = viewModel::onLastNameChanged,
                         label = { Text(stringResource(R.string.label_last_name)) },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = null
+                            )
+                        },
                         modifier = Modifier.weight(1f)
                     )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(modifier = Modifier.fillMaxWidth()) {
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(stringResource(R.string.label_gender))
+                    Spacer(modifier = Modifier.height(6.dp))
+                    genderOptions.forEach { gender ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = viewModel.gender.value == gender,
+                                onClick = { viewModel.onGenderChanged(gender) }
+                            )
+                            Text(gender)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
-                            .weight(1f)
                             .clickable { datePickerDialog.show() }
                     ) {
                         OutlinedTextField(
                             value = viewModel.birthday.value,
                             onValueChange = viewModel::onBirthdayChanged,
                             label = { Text(stringResource(R.string.label_birthdate)) },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.DateRange,
+                                    contentDescription = null
+                                )
+                            },
                             readOnly = true,
-                            enabled = false,
-                            modifier = Modifier.fillMaxWidth()
+                            enabled = false
                         )
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
 
+                    Button(
+                        onClick = { datePickerDialog.show() }
+                    ) {
+                        Text(stringResource(R.string.button_birthdate))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically) {
                     ExposedDropdownMenuBox(
                         expanded = expanded.value,
                         onExpandedChange = { expanded.value = !expanded.value },
@@ -160,7 +208,6 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                             },
                             modifier = Modifier
                                 .menuAnchor()
-                                .fillMaxWidth()
                         )
                         ExposedDropdownMenu(
                             expanded = expanded.value,
@@ -177,38 +224,21 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                             }
                         }
                     }
-                }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(stringResource(R.string.label_gender))
-                Row {
-                    genderOptions.forEach { gender ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = viewModel.gender.value == gender,
-                                onClick = { viewModel.onGenderChanged(gender) }
-                            )
-                            Text(gender)
-                        }
+                    Button(
+                        onClick = {
+                            Log.d("PersonalDataVM", "Nombre:${viewModel.name.value}, ...")
+                            Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
+                                .show()
+                        },
+//                    modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Text(stringResource(R.string.button_next))
                     }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Button(
-                    onClick = {
-                        Log.d("PersonalDataVM", "Nombre:${viewModel.name.value}, ...")
-                        Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
-                            .show()
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Text(stringResource(R.string.button_next))
                 }
             }
         } else {
@@ -252,6 +282,35 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(R.string.label_gender),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    genderOptions.forEach { gender ->
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(
+                                selected = viewModel.gender.value == gender,
+                                onClick = { viewModel.onGenderChanged(gender) }
+                            )
+                            Text(gender)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -273,39 +332,9 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Button(
-                        onClick = { datePickerDialog.show() },
-//                        modifier = Modifier.height(56.dp) // misma altura del TextField
+                        onClick = { datePickerDialog.show() }
                     ) {
                         Text(stringResource(R.string.button_birthdate))
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person, // o cualquier otro icono
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = stringResource(R.string.label_gender),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    genderOptions.forEach { gender ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            RadioButton(
-                                selected = viewModel.gender.value == gender,
-                                onClick = { viewModel.onGenderChanged(gender) }
-                            )
-                            Text(gender)
-                        }
                     }
                 }
 
@@ -353,10 +382,12 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
 
                 Button(
                     onClick = {
-                        Log.d(
-                            "PersonalDataVM",
-                            "Nombre:${viewModel.name.value}, Apellido:${viewModel.lastName.value}, Fecha:${viewModel.birthday.value}, Género:${viewModel.gender.value}, Educación:${viewModel.education.value}"
-                        )
+                        Log.d("Información personal", "Información personal")
+                        Log.d("Nombre", viewModel.name.value)
+                        Log.d("Apellido", viewModel.lastName.value)
+                        Log.d("Fecha de Nacimiento", viewModel.birthday.value)
+                        Log.d("Género", viewModel.gender.value)
+                        Log.d("Educación", viewModel.education.value)
                         Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
                             .show()
                     },

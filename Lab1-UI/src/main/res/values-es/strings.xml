@@ -3,7 +3,7 @@
     <string name="personal_title">Información personal</string>
     <string name="label_name">Nombres</string>
     <string name="label_last_name">Apellidos</string>
-    <string name="label_gender">Sexo</string>
+    <string name="label_gender">Género</string>
     <string name="gender_male">Masculino</string>
     <string name="gender_female">Femenino</string>
     <string name="label_birthdate">Fecha de nacimiento</string>

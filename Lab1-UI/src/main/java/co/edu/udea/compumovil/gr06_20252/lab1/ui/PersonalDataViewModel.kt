@@ -10,9 +10,9 @@ class PersonalDataViewModel : ViewModel() {
         private set
     var birthday = mutableStateOf("")
         private set
-    var gender = mutableStateOf("Masculino")
+    var gender = mutableStateOf("")
         private set
-    var education = mutableStateOf("Primaria")
+    var education = mutableStateOf("")
         private set
 
     fun onNameChanged(new: String) { name.value = new }
