@@ -1,6 +1,8 @@
 package co.edu.udea.compumovil.gr06_20252.lab1
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -42,13 +44,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import co.edu.udea.compumovil.gr06_20252.lab1.ui.PersonalDataViewModel
+import co.edu.udea.compumovil.gr06_20252.lab1.ui.viewModels.PersonalDataViewModel
 import java.util.Calendar
 
 
@@ -109,8 +112,16 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                                 contentDescription = null
                             )
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        isError = viewModel.nameError.value != null
                     )
+                    viewModel.nameError.value?.let { errorId ->
+                        Text(
+                            text = stringResource(errorId),
+                            color = Color.Red,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                     Spacer(modifier = Modifier.width(8.dp))
                     OutlinedTextField(
                         value = viewModel.lastName.value,
@@ -122,15 +133,25 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                                 contentDescription = null
                             )
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        isError = viewModel.lastNameError.value != null
                     )
+                    viewModel.lastNameError.value?.let { errorId ->
+                        Text(
+                            text = stringResource(errorId),
+                            color = Color.Red,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row(modifier = Modifier.fillMaxWidth(),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
@@ -151,9 +172,11 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
 
                 Spacer(modifier = Modifier.width(2.dp))
 
-                Row(modifier = Modifier.fillMaxWidth(),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Box(
                         modifier = Modifier
                             .clickable { datePickerDialog.show() }
@@ -169,8 +192,16 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                                 )
                             },
                             readOnly = true,
-                            enabled = false
+                            enabled = false,
+                            isError = viewModel.birthdayError.value != null
                         )
+                        viewModel.birthdayError.value?.let { errorId ->
+                            Text(
+                                text = stringResource(errorId),
+                                color = Color.Red,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -184,9 +215,11 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
 
                 Spacer(modifier = Modifier.height(2.dp))
 
-                Row(modifier = Modifier.fillMaxWidth(),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     ExposedDropdownMenuBox(
                         expanded = expanded.value,
                         onExpandedChange = { expanded.value = !expanded.value },
@@ -207,6 +240,7 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded.value)
                             },
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .menuAnchor()
                         )
                         ExposedDropdownMenu(
@@ -225,13 +259,29 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         }
                     }
 
+                    Spacer(modifier = Modifier.width(16.dp))
+
                     Button(
                         onClick = {
-                            Log.d("PersonalDataVM", "Nombre:${viewModel.name.value}, ...")
-                            Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
-                                .show()
+                            if (viewModel.validateAll()) {
+                                Log.d("Información personal", "Información personal")
+                                Log.d("Nombre", viewModel.name.value)
+                                Log.d("Apellido", viewModel.lastName.value)
+                                Log.d("Fecha de Nacimiento", viewModel.birthday.value)
+                                Log.d("Género", viewModel.gender.value)
+                                Log.d("Educación", viewModel.education.value)
+                                Toast.makeText(
+                                    context,
+                                    "Datos guardados (ver Logcat)",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                val activity = context as? Activity
+                                val intent = Intent(context, ContactDataActivity::class.java)
+                                context.startActivity(intent)
+                                activity?.finish()
+                            }
                         },
-//                    modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary
@@ -261,8 +311,15 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
-//                    isError = viewModel.nameError.value != null
+                    isError = viewModel.nameError.value != null
                 )
+                viewModel.nameError.value?.let { errorId ->
+                    Text(
+                        text = stringResource(errorId),
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -276,8 +333,16 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                             contentDescription = null
                         )
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = viewModel.lastNameError.value != null
                 )
+                viewModel.lastNameError.value?.let { errorId ->
+                    Text(
+                        text = stringResource(errorId),
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -326,6 +391,7 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         },
                         readOnly = true,
                         enabled = false,
+                        isError = viewModel.birthdayError.value != null,
                         modifier = Modifier.weight(1f) // ocupa todo el espacio disponible
                     )
 
@@ -336,6 +402,13 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                     ) {
                         Text(stringResource(R.string.button_birthdate))
                     }
+                }
+                viewModel.birthdayError.value?.let { errorId ->
+                    Text(
+                        text = stringResource(errorId),
+                        color = Color.Red,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -382,14 +455,24 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
 
                 Button(
                     onClick = {
-                        Log.d("Información personal", "Información personal")
-                        Log.d("Nombre", viewModel.name.value)
-                        Log.d("Apellido", viewModel.lastName.value)
-                        Log.d("Fecha de Nacimiento", viewModel.birthday.value)
-                        Log.d("Género", viewModel.gender.value)
-                        Log.d("Educación", viewModel.education.value)
-                        Toast.makeText(context, "Datos guardados (ver Logcat)", Toast.LENGTH_SHORT)
-                            .show()
+                        if (viewModel.validateAll()) {
+                            Log.d("Información personal", "Información personal")
+                            Log.d("Nombre", viewModel.name.value)
+                            Log.d("Apellido", viewModel.lastName.value)
+                            Log.d("Fecha de Nacimiento", viewModel.birthday.value)
+                            Log.d("Género", viewModel.gender.value)
+                            Log.d("Educación", viewModel.education.value)
+                            Toast.makeText(
+                                context,
+                                "Datos guardados (ver Logcat)",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            val activity = context as? Activity
+                            val intent = Intent(context, ContactDataActivity::class.java)
+                            context.startActivity(intent)
+                            activity?.finish()
+                        }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(

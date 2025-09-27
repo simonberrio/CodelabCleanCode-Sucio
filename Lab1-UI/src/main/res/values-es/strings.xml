@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">Lab 1 UI</string>
-    <string name="personal_title">Información personal</string>
+    <string name="personal_title">Información Personal</string>
     <string name="label_name">Nombres</string>
+    <string name="required_name">El nombre es requerido</string>
     <string name="label_last_name">Apellidos</string>
+    <string name="required_last_name">El apellido es requerido</string>
     <string name="label_gender">Género</string>
     <string name="gender_male">Masculino</string>
     <string name="gender_female">Femenino</string>
     <string name="label_birthdate">Fecha de nacimiento</string>
+    <string name="required_birthdate">La fecha de nacimiento es requerido</string>
     <string name="button_birthdate">Cambiar</string>
     <string name="label_education">Grado de escolaridad</string>
     <string-array name="education_levels">
@@ -16,6 +19,38 @@
         <item>Posgrado</item>
         <item>Maestría</item>
         <item>Doctorado</item>
+    </string-array>
+    <string name="contact_title">Información de Contacto</string>
+    <string name="label_phone">Teléfono</string>
+    <string name="required_phone">El teléfono es requerido</string>
+    <string name="label_email">Correo</string>
+    <string name="required_email">El correo es requerido</string>
+    <string name="invalid_email">El correo no es válido</string>
+    <string name="label_address">Dirección</string>
+    <string name="label_country">País</string>
+    <string name="required_country">El país es requerido</string>
+    <string name="label_city">Ciudad</string>
+    <string-array name="countries">
+        <item>Argentina</item>
+        <item>Bolivia</item>
+        <item>Brasil</item>
+        <item>Chile</item>
+        <item>Colombia</item>
+        <item>Costa Rica</item>
+        <item>Cuba</item>
+        <item>Ecuador</item>
+        <item>El Salvador</item>
+        <item>Guatemala</item>
+        <item>Honduras</item>
+        <item>México</item>
+        <item>Nicaragua</item>
+        <item>Panamá</item>
+        <item>Paraguay</item>
+        <item>Perú</item>
+        <item>Puerto Rico</item>
+        <item>República Dominicana</item>
+        <item>Uruguay</item>
+        <item>Venezuela</item>
     </string-array>
     <string name="button_next">Siguiente</string>
 </resources>
