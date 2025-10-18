@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -49,6 +50,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import co.edu.udea.compumovil.gr06_20252.lab1.ui.viewModels.PersonalDataViewModel
@@ -113,7 +115,8 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                             )
                         },
                         modifier = Modifier.weight(1f),
-                        isError = viewModel.nameError.value != null
+                        isError = viewModel.nameError.value != null,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
                     )
                     viewModel.nameError.value?.let { errorId ->
                         Text(
@@ -134,7 +137,8 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                             )
                         },
                         modifier = Modifier.weight(1f),
-                        isError = viewModel.lastNameError.value != null
+                        isError = viewModel.lastNameError.value != null,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
                     )
                     viewModel.lastNameError.value?.let { errorId ->
                         Text(
@@ -311,7 +315,8 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    isError = viewModel.nameError.value != null
+                    isError = viewModel.nameError.value != null,
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
                 )
                 viewModel.nameError.value?.let { errorId ->
                     Text(
@@ -334,7 +339,8 @@ fun PersonalDataScreen(viewModel: PersonalDataViewModel = viewModel()) {
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    isError = viewModel.lastNameError.value != null
+                    isError = viewModel.lastNameError.value != null,
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
                 )
                 viewModel.lastNameError.value?.let { errorId ->
                     Text(
