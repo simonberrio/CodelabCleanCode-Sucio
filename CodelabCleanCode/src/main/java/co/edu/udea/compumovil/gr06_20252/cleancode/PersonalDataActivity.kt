@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import java.util.Calendar
@@ -46,22 +47,22 @@ fun PersonalDataScreenSucia() {
     val context = LocalContext.current
 
     // Nombres mal nombrados
-    var n by remember { mutableStateOf("") }
+            var n by remember { mutableStateOf("") }
     var ln by remember { mutableStateOf("") }
     var bd by remember { mutableStateOf("") }
-    var gen by remember { mutableStateOf("M") }
+        var gen by remember { mutableStateOf("M") }
     var edu by remember { mutableStateOf("Primaria") }
 
     // errores duplicados e implementados inline
     var nErr by remember { mutableStateOf<String?>(null) }
-    var lnErr by remember { mutableStateOf<String?>(null) }
+      var lnErr by remember { mutableStateOf<String?>(null) }
 
     val cal = Calendar.getInstance()
-    val dp = DatePickerDialog(
-        context,
+                    val dp = DatePickerDialog(
+    context,
         { _, y, m, d ->
-            bd = "$d/${m + 1}/$y"
-        },
+                bd = "$d/${m + 1}/$y"
+         },
 cal.get(Calendar.YEAR),
 cal.get(Calendar.MONTH),
 cal.get(Calendar.DAY_OF_MONTH)

@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Laboratorio 1</string>
+    <string name="personal_title">Personal Information</string>
+    <string name="label_name">Name</string>
+    <string name="required_name">Name is required</string>
+    <string name="label_last_name">Last name</string>
+    <string name="required_last_name">Last name is required</string>
+    <string name="label_gender">Gender</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="label_birthdate">Birthdate</string>
+    <string name="required_birthdate">Birthdate is required</string>
+    <string name="button_birthdate">Change</string>
+    <string name="label_education">Level of education</string>
+    <string-array name="education_levels">
+        <item>Primary</item>
+        <item>Secondary</item>
+        <item>Undergraduate</item>
+        <item>Graduate</item>
+        <item>Master</item>
+        <item>Doctorate</item>
+    </string-array>
+    <string name="contact_title">Contact Information</string>
+    <string name="label_phone">Phone</string>
+    <string name="required_phone">Phone is required</string>
+    <string name="label_email">Email</string>
+    <string name="required_email">Email is required</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="label_address">Address</string>
+    <string name="label_country">Country</string>
+    <string name="required_country">Country is required</string>
+    <string name="label_city">City</string>
+    <string-array name="countries">
+        <item>Argentina</item>
+        <item>Bolivia</item>
+        <item>Brazil</item>
+        <item>Chile</item>
+        <item>Colombia</item>
+        <item>Costa Rica</item>
+        <item>Cuba</item>
+        <item>Ecuador</item>
+        <item>El Salvador</item>
+        <item>Guatemala</item>
+        <item>Honduras</item>
+        <item>Mexico</item>
+        <item>Nicaragua</item>
+        <item>Panama</item>
+        <item>Paraguay</item>
+        <item>Peru</item>
+        <item>Puerto Rico</item>
+        <item>Dominican Republic</item>
+        <item>Uruguay</item>
+        <item>Venezuela</item>
+    </string-array>
+    <string name="toast_saved">The information saved successful. See more in Logcat</string>
+    <string name="button_next">Next</string>
+</resources>

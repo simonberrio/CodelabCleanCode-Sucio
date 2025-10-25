@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import co.edu.udea.compumovil.gr06_20252.cleancode.PersonalDataActivity
 
@@ -27,11 +28,11 @@ class ContactDataActivity : ComponentActivity() {
             val ctx = LocalContext.current
             var phone = remember { mutableStateOf("") }
             var mail = remember { mutableStateOf("") }
-            var country = remember { mutableStateOf("") }
-            var address = remember { mutableStateOf("") }
+                var country = remember { mutableStateOf("") }
+                var address = remember { mutableStateOf("") }
             var city = remember { mutableStateOf("") }
 
-            Column(
+        Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(5.dp)
@@ -80,9 +81,9 @@ class ContactDataActivity : ComponentActivity() {
                             Toast.makeText(ctx, "Fields missing!", Toast.LENGTH_SHORT).show()
                         } else {
                             Log.d("Contact info", "Phone: " + phone.value)
-                            Log.d("Contact info", "Email: " + mail.value)
-                            Log.d("Contact info", "Country: " + country.value)
-                            Log.d("Contact info", "Address: " + address.value)
+                        Log.d("Contact info", "Email: " + mail.value)
+                        Log.d("Contact info", "Country: " + country.value)
+                        Log.d("Contact info", "Address: " + address.value)
                             Log.d("Contact info", "City: " + city.value)
                             Toast.makeText(ctx, "Saved!", Toast.LENGTH_SHORT).show()
 
