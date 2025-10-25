@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Labs20252-Gr06"
-include(":Lab1-UI")
+rootProject.name = "CodelabCleanCode"
+include(":CodelabCleanCode")
